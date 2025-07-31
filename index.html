@@ -1,21 +1,83 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dark Fantasy WebApp</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dark Fantasy RPG</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #9f5;
+    }
+    .button {
+      background-color: #444;
+      border: none;
+      color: #fff;
+      padding: 15px 30px;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #666;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🛡️ Профиль Рыцаря</h1>
-    <div id="profile">
-      <p><strong>Имя:</strong> <span id="player-name">Не указано</span></p>
-      <p><strong>Уровень:</strong> <span id="player-level">1</span></p>
-    </div>
-    <button onclick="changeName()">✏️ Изменить имя</button>
-    <button onclick="goBack()">🔙 Вернуться в игру</button>
+  <h1>🌌 Dark Fantasy RPG</h1>
+  <div id="profile"></div>
+
+  <div id="nameInput" style="display:none;">
+    <input type="text" id="newName" placeholder="Введите имя" />
+    <br/>
+    <button class="button" onclick="saveName()">✅ Сохранить</button>
   </div>
-  <script src="main.js"></script>
+
+  <button class="button" onclick="startGame()">🎮 Начать игру</button>
+  <button class="button" onclick="editName()">✏️ Изменить имя</button>
+
+  <script>
+    const profileDiv = document.getElementById('profile');
+    const nameInputDiv = document.getElementById('nameInput');
+
+    function loadProfile() {
+      const name = localStorage.getItem('playerName') || 'Без имени';
+      const level = localStorage.getItem('playerLevel') || '1';
+      profileDiv.innerHTML = `👤 Имя: <b>${name}</b><br>📊 Уровень: <b>${level}</b>`;
+    }
+
+    function editName() {
+      nameInputDiv.style.display = 'block';
+    }
+
+    function saveName() {
+      const name = document.getElementById('newName').value.trim();
+      if (name) {
+        localStorage.setItem('playerName', name);
+        nameInputDiv.style.display = 'none';
+        loadProfile();
+      }
+    }
+
+    function startGame() {
+      alert('🗡️ Игра начинается... (сюжет будет позже)');
+    }
+
+    loadProfile();
+  </script>
 </body>
 </html>
