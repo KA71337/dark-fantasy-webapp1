@@ -3,81 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dark Fantasy RPG</title>
-  <style>
-    body {
-      background-color: #111;
-      color: #eee;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 30px;
-    }
-    h1 {
-      color: #9f5;
-    }
-    .button {
-      background-color: #444;
-      border: none;
-      color: #fff;
-      padding: 15px 30px;
-      font-size: 18px;
-      margin: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .button:hover {
-      background-color: #666;
-    }
-    input {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-      border-radius: 5px;
-      border: none;
-    }
-  </style>
+  <title>Dark Fantasy</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🌌 Dark Fantasy RPG</h1>
-  <div id="profile"></div>
-
-  <div id="nameInput" style="display:none;">
-    <input type="text" id="newName" placeholder="Введите имя" />
-    <br/>
-    <button class="button" onclick="saveName()">✅ Сохранить</button>
+  <div class="container" id="mainMenu">
+    <h1>Добро пожаловать в Dark Fantasy</h1>
+    <button onclick="showPlayMenu()">🎮 Играть</button>
+    <button onclick="showProfile()">👤 Профиль</button>
+    <button onclick="alert('Это тёмное фэнтези-приключение. Исследуй мир, побеждай врагов и развивайся!')">📖 Об игре</button>
   </div>
 
-  <button class="button" onclick="startGame()">🎮 Начать игру</button>
-  <button class="button" onclick="editName()">✏️ Изменить имя</button>
+  <div class="container hidden" id="playMenu">
+    <h2>Выбери режим игры</h2>
+    <button onclick="startSolo()">🗡️ Одиночный режим</button>
+    <button onclick="alert('Сетевой режим в разработке')">🌐 Сетевой режим</button>
+    <button onclick="backToMain()">🔙 Назад</button>
+  </div>
+
+  <div class="container hidden" id="level1">
+    <h2>⛰️ Ты заспавнился на горе. Выбери действие:</h2>
+    <button onclick="goToCastle()">🏰 Пойти в замок</button>
+    <button onclick="dieFromWolf()">🐺 Путешествовать</button>
+  </div>
+
+  <div class="container hidden" id="castlePath">
+    <h2>🏰 Ты дошел до замка и исследуешь его. Что будешь делать?</h2>
+    <button onclick="enterCastle()">🚪 Зайти в замок</button>
+    <button onclick="startWerewolfBattle()">🏃‍♂️ Убежать и путешествовать</button>
+  </div>
+
+  <div class="container hidden" id="enterCastleResult">
+    <h2>Ты попытался зайти в замок, но тебя не пропустили! В следующий раз повезёт!<br>Уровень пройден.</h2>
+    <button onclick="backToMain()">🔙 Перейти в меню</button>
+  </div>
+
+  <div class="container hidden" id="werewolfFight">
+    <h2>🧟 Ты путешествуешь по миру, но на тебя напал оборотень. У тебя есть меч! Что будешь делать?</h2>
+    <button onclick="killWerewolf()">⚔️ Атаковать</button>
+    <button onclick="tryToEscape()">🏃‍♂️ Попробовать убежать</button>
+  </div>
+
+  <div class="container hidden" id="killedWerewolf">
+    <h2>✅ Ты успешно убил оборотня. Уровень завершён!</h2>
+    <button onclick="backToMain()">🔙 Перейти в меню</button>
+  </div>
+
+  <div class="container hidden" id="escaped">
+    <h2>😰 Ты еле-еле убежал, но лучше было атаковать. Уровень завершён.</h2>
+    <button onclick="backToMain()">🔙 Перейти в меню</button>
+  </div>
+
+  <div class="container hidden" id="died">
+    <h2>☠️ Поздно! Тебя ранил волк, и ты умер от кровотечения.</h2>
+    <button onclick="startSolo()">🔄 Начать заново</button>
+  </div>
+
+  <div class="container hidden" id="profile">
+    <h2>👤 Твой профиль</h2>
+    <p>Имя: Игрок</p>
+    <p>Уровень: 1</p>
+    <p>Очки: 0</p>
+    <button onclick="backToMain()">🔙 Назад в меню</button>
+  </div>
 
   <script>
-    const profileDiv = document.getElementById('profile');
-    const nameInputDiv = document.getElementById('nameInput');
-
-    function loadProfile() {
-      const name = localStorage.getItem('playerName') || 'Без имени';
-      const level = localStorage.getItem('playerLevel') || '1';
-      profileDiv.innerHTML = `👤 Имя: <b>${name}</b><br>📊 Уровень: <b>${level}</b>`;
+    function showPlayMenu() {
+      hideAll();
+      document.getElementById('playMenu').classList.remove('hidden');
     }
 
-    function editName() {
-      nameInputDiv.style.display = 'block';
+    function showProfile() {
+      hideAll();
+      document.getElementById('profile').classList.remove('hidden');
     }
 
-    function saveName() {
-      const name = document.getElementById('newName').value.trim();
-      if (name) {
-        localStorage.setItem('playerName', name);
-        nameInputDiv.style.display = 'none';
-        loadProfile();
-      }
+    function startSolo() {
+      hideAll();
+      document.getElementById('level1').classList.remove('hidden');
     }
 
-    function startGame() {
-      alert('🗡️ Игра начинается... (сюжет будет позже)');
+    function goToCastle() {
+      hideAll();
+      document.getElementById('castlePath').classList.remove('hidden');
     }
 
-    loadProfile();
+    function enterCastle() {
+      hideAll();
+      document.getElementById('enterCastleResult').classList.remove('hidden');
+    }
+
+    function startWerewolfBattle() {
+      hideAll();
+      document.getElementById('werewolfFight').classList.remove('hidden');
+    }
+
+    function killWerewolf() {
+      hideAll();
+      document.getElementById('killedWerewolf').classList.remove('hidden');
+    }
+
+    function tryToEscape() {
+      hideAll();
+      document.getElementById('escaped').classList.remove('hidden');
+    }
+
+    function dieFromWolf() {
+      hideAll();
+      document.getElementById('died').classList.remove('hidden');
+    }
+
+    function backToMain() {
+      hideAll();
+      document.getElementById('mainMenu').classList.remove('hidden');
+    }
+
+    function hideAll() {
+      document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+    }
   </script>
 </body>
 </html>
