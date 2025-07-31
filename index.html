@@ -1,151 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Dark Fantasy RPG</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Вселенная Dark Fantasy🕯️</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="main-menu">
-    <h1>Вселенная Dark Fantasy🕯️</h1>
-    <button onclick="showGame()">🎮 Играть</button>
-    <button onclick="showProfile()">🧙‍♂️ Профиль</button>
-  </div>
-
-  <div id="game-menu" style="display: none;">
-    <h2>🎮 Выберите режим</h2>
-    <button onclick="showSinglePlayerMenu()">Одиночный режим</button>
-    <button onclick="alert('Сетевой режим скоро появится!')">Сетевой режим</button>
-    <button onclick="showMainMenu()">🏠 В меню</button>
-  </div>
-
-  <div id="single-player-section" style="display: none;">
-    <h2>🎯 Выберите уровень</h2>
-    <div id="level-buttons">
-      <!-- Кнопки уровней -->
-      <script>
-        for (let i = 1; i <= 10; i++) {
-          document.write(`<button onclick="startLevel(${i})">Уровень ${i}</button>`);
-        }
-      </script>
+  <div id="app">
+    <div id="start-screen">
+      <button id="play-btn">🎮 Играть</button>
+      <button id="profile-btn">👤 Профиль</button>
     </div>
-    <button onclick="showMainMenu()">🏠 В меню</button>
+
+    <div id="profile-screen" class="hidden">
+      <h2>Профиль</h2>
+      <input type="text" id="name-input" placeholder="Введите имя"/>
+      <button id="save-name-btn">💾 Сохранить имя</button>
+      <button class="back-btn">⬅ Назад</button>
+    </div>
+
+    <div id="mode-screen" class="hidden">
+      <h2>Выберите режим</h2>
+      <button id="solo-btn">🗡️ Одиночный режим</button>
+      <button id="multi-btn">🌐 Сетевой режим</button>
+      <button class="back-btn">⬅ Назад</button>
+    </div>
+
+    <div id="level-select-screen" class="hidden">
+      <h2>Выберите уровень</h2>
+      <button class="level-btn" data-level="1">1️⃣ Уровень</button>
+      <button class="back-btn">⬅ Назад</button>
+    </div>
+
+    <div id="game-screen" class="hidden">
+      <img id="game-image" src="" alt="game scene" />
+      <p id="game-text"></p>
+      <div id="game-actions"></div>
+    </div>
   </div>
 
-  <div id="level-screen" style="display: none;">
-    <h2 id="level-title">Уровень</h2>
-    <p id="level-description"></p>
-    <div id="level-actions"></div>
-    <button onclick="showSinglePlayerMenu()">↩️ Назад</button>
-  </div>
-
-  <div id="profile-section" style="display: none;">
-    <h2>🧙‍♂️ Профиль</h2>
-    <p id="profile-name-text"></p>
-    <button id="edit-name-btn" onclick="editName()">🖊️ Добавить имя</button>
-    <input type="text" id="name-input" placeholder="Введите имя" style="display: none;">
-    <button id="save-name-btn" onclick="saveName()" style="display: none;">💾 Сохранить</button>
-    <button onclick="showMainMenu()">🏠 В меню</button>
-  </div>
-
-  <script>
-    function hideAllSections() {
-      document.getElementById("main-menu").style.display = "none";
-      document.getElementById("game-menu").style.display = "none";
-      document.getElementById("profile-section").style.display = "none";
-      document.getElementById("single-player-section").style.display = "none";
-      document.getElementById("level-screen").style.display = "none";
-    }
-
-    function showMainMenu() {
-      hideAllSections();
-      document.getElementById("main-menu").style.display = "block";
-    }
-
-    function showGame() {
-      hideAllSections();
-      document.getElementById("game-menu").style.display = "block";
-    }
-
-    function showSinglePlayerMenu() {
-      hideAllSections();
-      document.getElementById("single-player-section").style.display = "block";
-    }
-
-    function showProfile() {
-      hideAllSections();
-      const name = localStorage.getItem("playerName");
-      if (name) {
-        document.getElementById("profile-name-text").innerText = `Имя: ${name}`;
-        document.getElementById("edit-name-btn").innerText = "✏️ Изменить имя";
-      } else {
-        document.getElementById("profile-name-text").innerText = `Имя не указано.`;
-        document.getElementById("edit-name-btn").innerText = "🖊️ Добавить имя";
-      }
-      document.getElementById("profile-section").style.display = "block";
-    }
-
-    function editName() {
-      document.getElementById("name-input").style.display = "block";
-      document.getElementById("save-name-btn").style.display = "inline-block";
-    }
-
-    function saveName() {
-      const name = document.getElementById("name-input").value.trim();
-      if (name) {
-        localStorage.setItem("playerName", name);
-        showProfile();
-      }
-    }
-
-    function startLevel(level) {
-      hideAllSections();
-      document.getElementById("level-screen").style.display = "block";
-      document.getElementById("level-title").innerText = `Уровень ${level}`;
-
-      let description = "";
-      let actions = "";
-
-      if (level === 1) {
-        description = "⛰️ Ты заспавнился на горе. Выбери действие:";
-        actions = `
-          <button onclick="wolfAttack()">Путешествовать</button>
-          <button onclick="levelComplete()">Остаться</button>
-        `;
-      } else if (level === 2) {
-        description = "🏰 Ты дошел до замка и исследуешь его. Что будешь делать?";
-        actions = `
-          <button onclick="castleDenied()">Зайти в замок</button>
-        `;
-      } else {
-        description = "✨ Этот уровень пока не реализован.";
-        actions = `<button onclick="showSinglePlayerMenu()">Назад</button>`;
-      }
-
-      document.getElementById("level-description").innerText = description;
-      document.getElementById("level-actions").innerHTML = actions;
-    }
-
-    function levelComplete() {
-      document.getElementById("level-description").innerText = "🎉 Уровень пройден!";
-      document.getElementById("level-actions").innerHTML = `
-        <button onclick="showMainMenu()">🏠 Перейти в меню</button>
-      `;
-    }
-
-    function wolfAttack() {
-      document.getElementById("level-description").innerText = "🐺 Поздно! Тебя ранил волк и ты умер от кровотечения.";
-      document.getElementById("level-actions").innerHTML = `
-        <button onclick="showSinglePlayerMenu()">🔁 Начать заново</button>
-      `;
-    }
-
-    function castleDenied() {
-      document.getElementById("level-description").innerText = "🚪 Ты попытался зайти в замок, но тебя не пропустили! В следующий раз повезет! Уровень пройден.";
-      document.getElementById("level-actions").innerHTML = `
-        <button onclick="showMainMenu()">🏠 Перейти в меню</button>
-      `;
-    }
-  </script>
+  <script src="main.js"></script>
 </body>
 </html>
